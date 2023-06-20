@@ -8,13 +8,14 @@ use App\Http\Resources\userResource;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
 
-  public function test(userRegister $request)
+  public function register(userRegister $request)
 {
    
     $user = User::create([
@@ -46,9 +47,13 @@ class AuthController extends Controller
 
      public function logout(Request $request){
         $accessToken=$request->bearerToken();
-        $token=PersonalAccessToken::findToken($accessToken);
-        $token->delete();
-        return response(['msg'=>"Logged Out"]);
+        if($accessToken){
+            $token=PersonalAccessToken::findToken($accessToken);
+             $token->delete();
+             return response(['msg'=>"Logged Out"]);
+        }
+    
     }
 
+       
 }
