@@ -6,6 +6,7 @@ use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\warehouseRequest;
 use App\Http\Resources\warehouseResource;
 use App\Http\Resources\warehouse_branch_resource;
+use App\Models\Device;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,7 +78,7 @@ class WarehouseController extends Controller
      */
     public function destroy(Warehouse $warehouse)
     {
-        throw_if(!$warehouse, GeneralJsonException::class, 'Record not found');
+        throw_if(!$warehouse, GeneralJsonException::class,'Record not found');
 
         $warehouse->forceDelete();
         return response(['msg'=>'deleted']);
@@ -95,6 +96,15 @@ class WarehouseController extends Controller
         return response([$data]);
     }
 
+    public function getDevicesOfWarehouse(Warehouse $warehouse){
+        throw_if(!$warehouse,GeneralJsonException::class);
 
+        $devices = Device::join('branch', 'devices.branch_id', '=', 'branch.id')
+        ->where('warehouse_id', $warehouse->id)
+        ->select('device_name', 'serial_number', 'mac_address', 'status', 'registered_date', 'sold_date', 'cartoon_number')
+        ->get();
+
+        return response()->json($devices);
+    }
 
 }
