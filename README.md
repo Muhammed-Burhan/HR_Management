@@ -2,9 +2,7 @@
 
 This is an HR management API that provides endpoints for managing warehouse, branches, and devices in each branch.
 
-
 ## Status
-
 
 The initial setup of the HR management API is complete. The following endpoints are now available:
 
@@ -15,6 +13,8 @@ The initial setup of the HR management API is complete. The following endpoints 
 -   Added Exception Handling and fixed some errors.
 -   SetUp required relationships between the tables.
 -   Finished the need endpoints for branch model.
+-   Finished the method which return all branches of the same warehouse.
+-   Finished the method which returns all devices related to the same warehouse.
 
 ## Contact
 
