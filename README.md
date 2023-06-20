@@ -8,6 +8,8 @@ The initial setup of the HR management API is complete. The following endpoints 
 
 -   All the required tables created.
 -   All the required model and controllers created.
+-   Finished setting up the auth.
+-   Created the end points for warehouse.
 
 ## Contact
 

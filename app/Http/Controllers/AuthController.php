@@ -25,7 +25,7 @@ class AuthController extends Controller
         'password' => bcrypt($request['password']),
     ]);
 
-    $token = $user->createToken('myapptoken')->plainTextToken;
+    $token = $user->createToken('myapptoken', ['expires_in' => 60 * 60 * 24 * 3])->plainTextToken;
 
     return response([
         'user' => $user,
@@ -40,7 +40,7 @@ class AuthController extends Controller
         if(!$user || !Hash::check($request['password'],$user->password)){
             return response(["msg"=>"Incorrect email or password"]);
         }
-        $token=$user->createToken('myapptoken')->plainTextToken;
+        $token = $user->createToken('myapptoken', ['expires_in' => 60 * 60 * 24* 3])->plainTextToken;
         $response=['user'=>new userResource($user),'token'=>$token];
           return response($response);   
     }
