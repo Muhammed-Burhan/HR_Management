@@ -39,6 +39,10 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     //get all branches related to the same warehouse
      Route::get('/warehouse/{id}/branch',[WarehouseController::class,'getWarehouseBranch']);
 
+    //get all devices related to the same warehouse
+     Route::get('/warehouse/{warehouse}/device',[WarehouseController::class,'getDevicesOfWarehouse']);
+
+
 
     //Branch End Points
      Route::get('/branch',[BranchController::class,'index']);

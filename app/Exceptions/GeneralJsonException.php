@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Http\JsonResponse;
+use Exception;
 
 class GeneralJsonException extends Exception
 {
@@ -17,7 +17,8 @@ class GeneralJsonException extends Exception
      * @param \Illuminate\Http\Request $request
      */
     public function render($request)
-    {
+    {   
+        $message='Record not found.';
         return new JsonResponse([
             'error' => [
                 'message' => $this->getMessage()
