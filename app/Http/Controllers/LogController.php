@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Date;
+use App\Exceptions\GeneralJsonException;
+use App\Http\Resources\LogResource;
+use Illuminate\Support\Facades\Log as FileLog;
 use App\Models\Log;
 use Illuminate\Http\Request;
 
@@ -12,23 +15,35 @@ class LogController extends Controller
      */
     public function index()
     {
-        //
+         try {
+            $warehouses=Log::all();
+           
+             return LogResource::collection($warehouses);
+            } catch (\Throwable $th) {
+            throw (new GeneralJsonException($th->getMessage()));
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function log(array $data)
     {
-        //
+        
+        $log = new Log();
+            $currentTime = Date::now()->format('Y-m-d H:i:s');
+            $log->user_id = $data['user_id'];
+            $log->user=$data['user'];
+            $log->action = $data['action'];
+            $log->details = $data['details'];
+            $log->time_of_log=$currentTime;
+            $log->save();
+
+
+        $Message="User {$log->user_id}:{$log->user}: {$log->action} - {$log->details} / Date/Time: {$log->time_of_log}";
+        FileLog::Channel('userActions')->info($Message);
+
     }
 
     /**
@@ -36,30 +51,23 @@ class LogController extends Controller
      */
     public function show(Log $log)
     {
-        //
+        throw_if(!$log, GeneralJsonException::class);
+           
+        return new LogResource($log);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Log $log)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Log $log)
-    {
-        //
-    }
-
+   
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Log $log)
     {
-        //
+        throw_if(!$log, GeneralJsonException::class,'Record not found');
+
+        $log->forceDelete();
+        return response(['msg'=>'deleted']);
     }
+
+   
 }

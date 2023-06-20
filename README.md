@@ -15,6 +15,7 @@ The initial setup of the HR management API is complete. The following endpoints 
 -   Finished the need endpoints for branch model.
 -   Finished the method which return all branches of the same warehouse.
 -   Finished the method which returns all devices related to the same warehouse.
+-   now all user actions are logged.
 
 ## Contact
 

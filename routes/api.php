@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Middleware\SuperAdminMiddleware;
 use App\Models\Warehouse;
@@ -45,12 +46,16 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
 
 
     //Branch End Points
-     Route::get('/branch',[BranchController::class,'index']);
-     Route::get('/branch/{branch}',[BranchController::class,'show']);
-     Route::post('/branch',[BranchController::class,'store']);
-     Route::put('/branch/{branch}',[BranchController::class,'update']);
+    Route::get('/branch',[BranchController::class,'index']);
+    Route::get('/branch/{branch}',[BranchController::class,'show']);
+    Route::post('/branch',[BranchController::class,'store']);
+    Route::put('/branch/{branch}',[BranchController::class,'update']);
     Route::delete('/branch/{branch}',[BranchController::class,'destroy']);
 
+    //Log End Points
+    Route::get('/log',[LogController::class,'index']);
+    Route::get('/log/{log}',[LogController::class,'show']);
+    Route::delete('/log/{log}',[LogController::class,'destroy']);
 
 
 
