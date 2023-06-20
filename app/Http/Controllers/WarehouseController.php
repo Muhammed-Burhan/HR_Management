@@ -18,6 +18,13 @@ class WarehouseController extends Controller
     public function index()
     {
     try {
+             $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Show Warehouse',
+                'details' => 'User requesting all Warehouse',
+                ]);
              $warehouses=Warehouse::all();
              return warehouseResource::collection($warehouses);
             } catch (\Throwable $th) {
@@ -33,7 +40,13 @@ class WarehouseController extends Controller
     {
         try {
             $user=Auth::user();
-            
+             $log = new LogController();
+             $log->log([
+                'user_id' =>$user->id,
+                'user' =>$user->name,
+                'action' => 'store Warehouse',
+                'details' => 'User create a new warehouse',
+                ]);
              $result=Warehouse::create([
                 'name'=>$request['name'],
                 'created_by'=>$user->id,
@@ -50,8 +63,14 @@ class WarehouseController extends Controller
     public function show(Warehouse $warehouse)
     {
         
-        throw_if(!$warehouse, GeneralJsonException::class, 'Failed to get the warehouse');
-           
+        throw_if(!$warehouse, GeneralJsonException::class);
+            $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Show Warehouse',
+                'details' => 'User requests for a warehouse',
+                ]);
          return new warehouseResource($warehouse);
     }
 
@@ -66,7 +85,13 @@ class WarehouseController extends Controller
         $warehouse->update($request->only([
             'name'
         ]));
-
+        $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Update Warehouse',
+                'details' => 'User updates a warehouse',
+                ]);
         return new warehouseResource($warehouse);
      } catch (\Throwable $th) {
        throw (new GeneralJsonException($th->getMessage()));
@@ -79,7 +104,13 @@ class WarehouseController extends Controller
     public function destroy(Warehouse $warehouse)
     {
         throw_if(!$warehouse, GeneralJsonException::class,'Record not found');
-
+         $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'deleted Warehouse',
+                'details' => 'User deleted a warehouse',
+                ]);
         $warehouse->forceDelete();
         return response(['msg'=>'deleted']);
        
@@ -90,6 +121,13 @@ class WarehouseController extends Controller
         $warehouse=Warehouse::find($id);
 
         throw_if(!$warehouse,GeneralJsonException::class,'No warehouse found');
+         $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'get Warehouse Branch',
+                'details' => 'User get all related branches to a warehouse',
+                ]);
 
         $data=new warehouse_branch_resource($warehouse);
 
@@ -98,6 +136,14 @@ class WarehouseController extends Controller
 
     public function getDevicesOfWarehouse(Warehouse $warehouse){
         throw_if(!$warehouse,GeneralJsonException::class);
+
+         $log = new LogController();
+             $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'gets Devices Of a Warehouse',
+                'details' => 'User get all related devices of a warehouse',
+                ]);
 
         $devices = Device::join('branch', 'devices.branch_id', '=', 'branch.id')
         ->where('warehouse_id', $warehouse->id)

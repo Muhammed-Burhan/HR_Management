@@ -11,6 +11,9 @@ class Device extends Model
 
     protected $table='devices';
 
+    public $timestamps = false;
+
+
     public function branch(){
         return $this->belongsTo(Branch::class,'branch_id');
     }

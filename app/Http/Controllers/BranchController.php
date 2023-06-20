@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\GeneralJsonException;
+use Illuminate\Http\Request;
 use App\Http\Resources\BranchResource;
 use App\Http\Requests\BranchRequest;
 use App\Models\Branch;
-use Illuminate\Http\Request;
+use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 
 class BranchController extends Controller
@@ -17,7 +18,14 @@ class BranchController extends Controller
     public function index()
     {
          try {
-             $warehouses=Branch::all();
+            $warehouses=Branch::all();
+            $log = new LogController();
+            $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Show Branch',
+                'details' => 'User requesting all branches',
+                ]);
              return BranchResource::collection($warehouses);
             } catch (\Throwable $th) {
             throw (new GeneralJsonException($th->getMessage()));
@@ -33,7 +41,14 @@ class BranchController extends Controller
         
         try {
             $user=Auth::user();
-            
+            $log = new LogController();
+            $log->log([
+                'user_id' =>$user->id,
+                'user' =>$user->name,
+                'action' => 'Creates Branch',
+                'details' => 'User creates a new branch',
+                ]);
+
              $result=Branch::create([
                 'name'=>$request['name'],
                 'warehouse_id'=>$request['warehouse_id'],
@@ -58,7 +73,13 @@ class BranchController extends Controller
         
         $remaining_devices=$branch->remainingDevice()->count();
         $sold_devices=$branch->soldDevice()->count();
-
+           $log = new LogController();
+            $log->log([
+                'user_id' =>$branch->id,
+                'user' =>Auth::user()->name,
+                'action' => 'request for branch',
+                'details' => 'User request for a single branch',
+                ]);
         $branch_device_data=[
             'name'=>$branch->name,
             'profileLogo'=>$branch->profile_logo,
@@ -80,7 +101,13 @@ class BranchController extends Controller
         $branch->update($request->only([
             'name','profile_logo','address','warehouse_id'
         ]));
-
+           $log = new LogController();
+            $log->log([
+                'user_id' =>$branch->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Update:Branch',
+                'details' => 'User updates a new branch',
+                ]);
         return new BranchResource($branch);
      } catch (\Throwable $th) {
        throw (new GeneralJsonException($th->getMessage()));
@@ -93,7 +120,13 @@ class BranchController extends Controller
     public function destroy(Branch $branch)
     {
         throw_if(!$branch, GeneralJsonException::class, 'Record not found');
-
+        $log = new LogController();
+            $log->log([
+                'user_id' =>$branch->id,
+                'user' =>Auth::user()->name,
+                'action' => 'Delete:Branch',
+                'details' => 'User deletes a new branch',
+                ]);
         $branch->forceDelete();
         return response(['msg'=>'deleted the branch']);
     }

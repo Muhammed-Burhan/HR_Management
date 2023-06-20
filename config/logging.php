@@ -52,6 +52,12 @@ return [
     */
 
     'channels' => [
+        'userActions' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/custom.log'),
+            'level' => 'info',
+            'days' => 7,
+                    ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
