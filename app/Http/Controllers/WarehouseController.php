@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\warehouseRequest;
 use App\Http\Resources\warehouseResource;
+use App\Http\Resources\warehouse_branch_resource;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,8 @@ class WarehouseController extends Controller
     try {
              $warehouses=Warehouse::all();
              return warehouseResource::collection($warehouses);
-        } catch (\Throwable $th) {
-            return response(['error'=>$th]);
+            } catch (\Throwable $th) {
+            throw (new GeneralJsonException($th->getMessage()));
         }
     }
 
@@ -82,4 +83,15 @@ class WarehouseController extends Controller
         return response(['msg'=>'deleted']);
        
     }
+
+    public function getWarehouseBranch(Request $request,string $id)
+{   
+    $warehouse=Warehouse::find($id);
+
+    throw_if(!$warehouse,GeneralJsonException::class,'No warehouse found');
+
+    $data=new warehouse_branch_resource($warehouse);
+
+    return response([$data]);
+}
 }
