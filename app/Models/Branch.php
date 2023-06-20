@@ -12,6 +12,15 @@ class Branch extends Model
 
      protected $table = 'branch';
 
+      protected $fillable = [
+        'name',
+        'warehouse_id',
+        'account_id',
+        'profile_logo',
+        'address',
+        'time'
+    ];
+    public $timestamps = false;
      public function user()
     {
         return $this->belongsTo(User::class, 'account_id');
@@ -24,5 +33,12 @@ class Branch extends Model
     public function devices()
     {
         return $this->hasMany(Device::class, 'branch_id','id');
+    }
+
+    public function remainingDevice(){
+        return $this->devices()->whereNull('sold_date');
+    }
+    public function soldDevice(){
+        return $this->devices()->whereNotNull('sold_date');
     }
 }
