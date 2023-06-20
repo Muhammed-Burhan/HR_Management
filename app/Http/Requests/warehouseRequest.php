@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
-
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class warehouseRequest extends FormRequest
@@ -22,7 +22,7 @@ class warehouseRequest extends FormRequest
     public function rules(): array
     {
         return [
-             'name' => 'required|string|unique:warehouses,name'
+             'name' => 'required|string'
         ];
     }
 }

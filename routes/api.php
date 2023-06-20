@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     //WareHouse End Points 
     Route::get('/warehouse',[WarehouseController::class,'index']);
     Route::post('/warehouse',[WarehouseController::class,'store']);
-    Route::get('/warehouse/{id}',[WarehouseController::class,'show']);
+    Route::get('/warehouse/{warehouse}',[WarehouseController::class,'show']);
     Route::put('/warehouse/{warehouse}',[WarehouseController::class,'update']);
     Route::delete('/warehouse/{warehouse}',[WarehouseController::class,'destroy']);
 

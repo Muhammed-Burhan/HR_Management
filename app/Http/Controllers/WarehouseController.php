@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\GeneralJsonException;
 use App\Http\Requests\warehouseRequest;
 use App\Http\Resources\warehouseResource;
 use App\Models\Warehouse;
@@ -22,20 +23,12 @@ class WarehouseController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      */
     public function store(warehouseRequest $request)
     {
-       
         try {
             $user=Auth::user();
             
@@ -43,35 +36,24 @@ class WarehouseController extends Controller
                 'name'=>$request['name'],
                 'created_by'=>$user->id,
         ]);
-       
-             return new warehouseResource($result);
+            return new warehouseResource($result);
         } catch (\Throwable $th) {
-            return response(['error'=>$th]);
+            throw (new GeneralJsonException($th->getMessage()));
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Warehouse $warehouse)
     {
-        try {   
         
-                $result=Warehouse::query()->find($id);
-             
-                return new warehouseResource($result);
-        } catch (\Throwable $th) {
-            return response(['error'=>'not warehouse with this id']);
-        }
+        throw_if(!$warehouse, GeneralJsonException::class, 'Failed to get the warehouse');
+           
+         return new warehouseResource($warehouse);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Warehouse $warehouse)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -85,7 +67,7 @@ class WarehouseController extends Controller
 
         return new warehouseResource($warehouse);
      } catch (\Throwable $th) {
-       return response(['error' => $th]);
+       throw (new GeneralJsonException($th->getMessage()));
      }
     }
 
@@ -94,11 +76,10 @@ class WarehouseController extends Controller
      */
     public function destroy(Warehouse $warehouse)
     {
-        if($warehouse) {
-            $warehouse->forceDelete();
-            return response(['msg'=>'deleted']);
-        }
+        throw_if(!$warehouse, GeneralJsonException::class, 'Record not found');
 
-        return response(['msg'=>"no warehouse with id {$warehouse} found"]);
+        $warehouse->forceDelete();
+        return response(['msg'=>'deleted']);
+       
     }
 }
