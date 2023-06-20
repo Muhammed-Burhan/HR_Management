@@ -23,5 +23,8 @@ class Warehouse extends Model
         'name',
         'created_by',
     ];
-
+  
+    public function branches(){
+      return $this->hasMany(Branch::class,'warehouse_id','id');
+    } 
 }

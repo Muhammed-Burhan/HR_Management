@@ -10,4 +10,8 @@ class Device extends Model
     use HasFactory;
 
     protected $table='devices';
+
+    public function branch(){
+        return $this->belongsTo(Branch::class,'branch_id');
+    }
 }
