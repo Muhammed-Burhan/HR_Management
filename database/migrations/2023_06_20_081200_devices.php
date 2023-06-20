@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('branch_id');
             $table->foreign('branch_id')->references('id')->on('branch')->onDelete('cascade');
             $table->time('registered_date')->default(now());
-            $table->time('sold_date')->default(null);
+            $table->time('sold_date')->nullable();
             $table->string('cartoon_number');
         });
     }

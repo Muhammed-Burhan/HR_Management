@@ -85,13 +85,16 @@ class WarehouseController extends Controller
     }
 
     public function getWarehouseBranch(Request $request,string $id)
-{   
-    $warehouse=Warehouse::find($id);
+    {      
+        $warehouse=Warehouse::find($id);
 
-    throw_if(!$warehouse,GeneralJsonException::class,'No warehouse found');
+        throw_if(!$warehouse,GeneralJsonException::class,'No warehouse found');
 
-    $data=new warehouse_branch_resource($warehouse);
+        $data=new warehouse_branch_resource($warehouse);
 
-    return response([$data]);
-}
+        return response([$data]);
+    }
+
+
+
 }

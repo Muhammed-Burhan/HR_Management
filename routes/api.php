@@ -4,6 +4,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Middleware\SuperAdminMiddleware;
 use App\Models\Warehouse;
@@ -35,9 +36,19 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     Route::get('/warehouse/{warehouse}',[WarehouseController::class,'show']);
     Route::put('/warehouse/{warehouse}',[WarehouseController::class,'update']);
     Route::delete('/warehouse/{warehouse}',[WarehouseController::class,'destroy']);
+    //get all branches related to the same warehouse
+     Route::get('/warehouse/{id}/branch',[WarehouseController::class,'getWarehouseBranch']);
+
 
     //Branch End Points
-    Route::get('/warehouse/{id}/branch',[WarehouseController::class,'getWarehouseBranch']);
+     Route::get('/branch',[BranchController::class,'index']);
+     Route::get('/branch/{branch}',[BranchController::class,'show']);
+     Route::post('/branch',[BranchController::class,'store']);
+     Route::put('/branch/{branch}',[BranchController::class,'update']);
+    Route::delete('/branch/{branch}',[BranchController::class,'destroy']);
+
+
+
 
 
 });
