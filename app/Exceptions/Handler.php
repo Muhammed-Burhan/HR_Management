@@ -18,7 +18,9 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
+     protected $dontReport = [
+        GeneralJsonException::class
+    ];
     /**
      * Register the exception handling callbacks for the application.
      */
@@ -27,12 +29,13 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, Request $request) {
         if ($request->is('api/*')) {
             return response()->json([
-                'message' => 'Record not found.'
+                'message' => 'Record not found.'.$e
             ], 404);
         }
     });
+   
+        
         $this->reportable(function (Throwable $e) {
-            //
-        });
+    });
     }
 }
