@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Events\Device_Status_Changed;
 use App\Http\Requests\DeviceRequest;
 use App\Http\Resources\DeviceResource;
@@ -10,7 +8,9 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use App\Exceptions\GeneralJsonException;
-
+use App\Jobs\ImportDevices;
+use League\Csv\Writer;
+use League\Csv\CannotInsertRecord;
 class DeviceController extends Controller
 {
     /**
@@ -151,7 +151,7 @@ class DeviceController extends Controller
       
       throw_if(!$device, GeneralJsonException::class);
       $user=Auth::user();
-      if($device->status === true){
+      if($device->status){
         return response(['msg'=>'device status changed before']);
       }
       $log = new LogController();
@@ -169,5 +169,54 @@ class DeviceController extends Controller
           event(new Device_Status_Changed($user,$device));
         }
     }
+
+
+
+   public function export()
+  {
+    $filePath = app_path('Http/devices.csv');
+    $devices = Device::all(['id', 'device_name', 'serial_number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
+    $log = new LogController();
+      $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'export devices',
+                'details' => 'User requests for exporting devices data',
+                ]);
+    if(empty($devices)){
+      return response(['meassge'=>"devices table is empty"]);
+    }
+
+    $file = fopen($filePath, 'a');
+      
+    // Write the header row
+    fputcsv($file, ['id', 'device_name', 'serial_number Number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
+
+    // Write device data rows
+    foreach ($devices as $device) {
+        fputcsv($file, [
+            $device->id,
+            $device->device_name,
+            $device->serial_number,
+            $device->mac_address,
+            $device->status,
+            strval($device->branch_id),
+            $device->registered_date,
+            $device->sold_date,
+            $device->cartoon_number,
+        ]);
+    }
+    
+    fclose($file);
+    
+    return response(['message' => 'Devices exported successfully']);
+  }
+
+  public function import(){
+    $filePath = app_path('Http/devices.csv');
+
+    ImportDevices::dispatch($filePath);
+  }
+
 
 }
