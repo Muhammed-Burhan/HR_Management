@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
    
     Route::get('devices/search',[DeviceController::class,'search']);
     
-    Route::get('devices/export',[DeviceController::class,'exportData']);
+    Route::get('devices/export',[DeviceController::class,'export']);
     
     
     Route::prefix('devices')->group(function () {
