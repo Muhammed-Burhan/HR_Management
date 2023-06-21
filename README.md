@@ -51,6 +51,19 @@ To install this application, follow these steps:
    php artisan serve
 ```
 
+7. To export database:
+
+```
+   php artisan database:export
+```
+
+8. To export devices table to json:
+
+```
+  php artisan devices:export-json
+
+```
+
 ## Contact
 
 If you have any questions or feedback, please contact me at mohammed_burhan@outlook.com

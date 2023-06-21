@@ -27,8 +27,8 @@ class ExportDevicesToJson extends Command
         $data = $devices->toArray();
         $json = json_encode($data, JSON_PRETTY_PRINT);
 
-        $filename = 'devices.json';
-        $path = storage_path('app/' . $filename);
+        $filename = app_path('Http/devices.csv');
+        $path = storage_path($filename);
 
         File::put($path, $json);
 
