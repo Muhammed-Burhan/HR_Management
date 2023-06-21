@@ -128,19 +128,19 @@ class DeviceController extends Controller
 
 
      public function search(Request $request){
-      dd('test');
-       $query_params = $request->query();
+       $query_params = $request->query('q');
+       
        if(!$query_params) return response(['msg'=>'please provide query']);
         $devices = Device::where('serial_number', 'like', "%$query_params%")
         ->orWhere('mac_address', 'like', "%$query_params%")
         ->get();
-
-        if(empty($devices)) return response()->json(['msg'=>'no data found for the search']);
         
-        return new DeviceResource($devices);
+       
+        
+        return  DeviceResource::collection($devices);
     }
 
-    public function pew(){
+    public function changeStatus(){
       dd('test');
     }
 

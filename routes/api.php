@@ -61,16 +61,25 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
 
 
     //Device End Points
-    Route::get('/device',[DeviceController::class,'index']);
-    Route::get('/device/{device}',[DeviceController::class,'show']);
-    Route::post('/device',[DeviceController::class,'store']);
-    Route::put('/device/{device}',[DeviceController::class,'update']);
-    Route::delete('/device/{device}',[DeviceController::class,'destroy']);
-    
+    // Route::get('/device',[DeviceController::class,'index']);
+    // Route::get('/device/{device}',[DeviceController::class,'show']);
+    // Route::post('/device',[DeviceController::class,'store']);
+    // Route::put('/device/{device}',[DeviceController::class,'update']);
+    // Route::delete('/device/{device}',[DeviceController::class,'destroy']);
+    Route::get('device/search',[DeviceController::class,'search']);
+  
+  
+    Route::prefix('device')->group(function () {
+        Route::get('/',[DeviceController::class,'index']);
+        Route::get('/{device}',[DeviceController::class,'show']);
+        Route::post('/',[DeviceController::class,'store']);
+        Route::put('/{device}',[DeviceController::class,'update']);
+        Route::delete('/{device}',[DeviceController::class,'destroy']);
+        Route::get('/{device}/status',[DeviceController::class,'changeStatus']);
+    });
     
 });
 
-Route::get('/device/search', [DeviceController::class, 'search']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
