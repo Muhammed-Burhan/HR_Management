@@ -60,16 +60,13 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     Route::delete('/device',[DeviceController::class,'search']);
 
 
-    //Device End Points
-    // Route::get('/device',[DeviceController::class,'index']);
-    // Route::get('/device/{device}',[DeviceController::class,'show']);
-    // Route::post('/device',[DeviceController::class,'store']);
-    // Route::put('/device/{device}',[DeviceController::class,'update']);
-    // Route::delete('/device/{device}',[DeviceController::class,'destroy']);
-    Route::get('device/search',[DeviceController::class,'search']);
-  
-  
-    Route::prefix('device')->group(function () {
+   
+    Route::get('devices/search',[DeviceController::class,'search']);
+    
+    Route::get('devices/export',[DeviceController::class,'exportData']);
+    
+    
+    Route::prefix('devices')->group(function () {
         Route::get('/',[DeviceController::class,'index']);
         Route::get('/{device}',[DeviceController::class,'show']);
         Route::post('/',[DeviceController::class,'store']);
