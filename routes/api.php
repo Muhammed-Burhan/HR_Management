@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Middleware\SuperAdminMiddleware;
@@ -56,10 +57,27 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     Route::get('/log',[LogController::class,'index']);
     Route::get('/log/{log}',[LogController::class,'show']);
     Route::delete('/log/{log}',[LogController::class,'destroy']);
+    Route::delete('/device',[DeviceController::class,'search']);
 
 
-
-
+    //Device End Points
+    // Route::get('/device',[DeviceController::class,'index']);
+    // Route::get('/device/{device}',[DeviceController::class,'show']);
+    // Route::post('/device',[DeviceController::class,'store']);
+    // Route::put('/device/{device}',[DeviceController::class,'update']);
+    // Route::delete('/device/{device}',[DeviceController::class,'destroy']);
+    Route::get('device/search',[DeviceController::class,'search']);
+  
+  
+    Route::prefix('device')->group(function () {
+        Route::get('/',[DeviceController::class,'index']);
+        Route::get('/{device}',[DeviceController::class,'show']);
+        Route::post('/',[DeviceController::class,'store']);
+        Route::put('/{device}',[DeviceController::class,'update']);
+        Route::delete('/{device}',[DeviceController::class,'destroy']);
+        Route::get('/{device}/status',[DeviceController::class,'changeStatus']);
+    });
+    
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

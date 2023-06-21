@@ -18,7 +18,9 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-
+     protected $dontReport = [
+        GeneralJsonException::class
+    ];
     /**
      * Register the exception handling callbacks for the application.
      */
@@ -31,8 +33,9 @@ class Handler extends ExceptionHandler
             ], 404);
         }
     });
+   
+        
         $this->reportable(function (Throwable $e) {
-            //
-        });
+    });
     }
 }
