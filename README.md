@@ -71,6 +71,8 @@ To install this application, follow these steps:
     MAIL_PASSWORD=Password
     MAIL_ENCRYPTION=tls
 ```
+-Please be aware that you need to create an account and use a token in the header to request the routes.
+
 
 ## Contact
 
