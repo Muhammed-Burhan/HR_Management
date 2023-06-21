@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\ExportDevicesToJson::class,
+            Commands\ExportDatabase::class,
     ];
 
     /**
