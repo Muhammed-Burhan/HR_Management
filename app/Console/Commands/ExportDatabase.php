@@ -24,7 +24,7 @@ class ExportDatabase extends Command
         // Create a filename for the export
         $filename = 'database_' . date('Y_m_d_His') . '.sql';
 
-        // Generate the mysqldump command
+        // Generate the mySqlDump command
         $command = sprintf(
             'mysqldump --user=%s --password=%s --host=%s --port=%s %s > %s',
             $config['username'],
@@ -34,8 +34,9 @@ class ExportDatabase extends Command
             $config['database'],
             storage_path('app/' . $filename)
         );
+        
 
-        // Execute the mysqldump command
+        // Execute the mySqlDump command
         exec($command);
 
         $this->info("Database exported to $filename");

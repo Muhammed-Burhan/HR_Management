@@ -51,13 +51,13 @@ To install this application, follow these steps:
    php artisan serve
 ```
 
-7. To export database:
+7. To export database (you can find the file inside :storage/app):
 
 ```
    php artisan database:export
 ```
 
-8. To export devices table to json:
+8. To export devices table to json (you can find the file inside: storage/app):
 
 ```
   php artisan devices:export-json
