@@ -1,4 +1,4 @@
-ID,Device_Name,"Serial Number","MAC Address",Status,Branch_Id,"Registered Date","Sold Date","Cartoon Number"
+id,device_name,"serial_number Number",mac_address,status,branch_id,registered_date,sold_date,cartoon_number
 1,P2,12214343,44WEWFDFD-WEWEW-WEWEW,1,1,06:52:16,,P2
 2,P3,122143430221,44WEWFDFD-WEWEW-WEWEW0221,1,1,06:52:32,,P3
 4,"Pc 2024",12214343,44WEWFDFD-WEWEW-WEWEW,0,1,08:30:41,,1

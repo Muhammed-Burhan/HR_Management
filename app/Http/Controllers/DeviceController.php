@@ -8,7 +8,7 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use App\Exceptions\GeneralJsonException;
-
+use App\Jobs\ImportDevices;
 use League\Csv\Writer;
 use League\Csv\CannotInsertRecord;
 class DeviceController extends Controller
@@ -174,6 +174,7 @@ class DeviceController extends Controller
 
    public function export()
   {
+    $filePath = app_path('Http/devices.csv');
     $devices = Device::all(['id', 'device_name', 'serial_number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
     $log = new LogController();
       $log->log([
@@ -186,10 +187,10 @@ class DeviceController extends Controller
       return response(['meassge'=>"devices table is empty"]);
     }
 
-    $file = fopen('devices', 'w');
+    $file = fopen($filePath, 'a');
       
     // Write the header row
-    fputcsv($file, ['ID', 'Device_Name', 'Serial Number', 'MAC Address', 'Status', 'Branch_Id', 'Registered Date', 'Sold Date', 'Cartoon Number']);
+    fputcsv($file, ['id', 'device_name', 'serial_number Number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
 
     // Write device data rows
     foreach ($devices as $device) {
@@ -199,7 +200,7 @@ class DeviceController extends Controller
             $device->serial_number,
             $device->mac_address,
             $device->status,
-            $device->branch_id,
+            strval($device->branch_id),
             $device->registered_date,
             $device->sold_date,
             $device->cartoon_number,
@@ -209,6 +210,12 @@ class DeviceController extends Controller
     fclose($file);
     
     return response(['message' => 'Devices exported successfully']);
+  }
+
+  public function import(){
+    $filePath = app_path('Http/devices.csv');
+
+    ImportDevices::dispatch($filePath);
   }
 
 
