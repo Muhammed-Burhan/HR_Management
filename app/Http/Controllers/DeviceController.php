@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Device_Status_Changed;
 use App\Http\Requests\DeviceRequest;
 use App\Http\Resources\DeviceResource;
 use Illuminate\Support\Facades\Auth;
@@ -134,14 +135,39 @@ class DeviceController extends Controller
         $devices = Device::where('serial_number', 'like', "%$query_params%")
         ->orWhere('mac_address', 'like', "%$query_params%")
         ->get();
-        
-       
-        
+
+        $log = new LogController();
+        $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'search',
+                'details' => 'User requests searching',
+                ]);
+
         return  DeviceResource::collection($devices);
     }
 
-    public function changeStatus(){
-      dd('test');
+    public function changeStatus(Device $device){
+      
+      throw_if(!$device, GeneralJsonException::class);
+      $user=Auth::user();
+      if($device->status === true){
+        return response(['msg'=>'device status changed before']);
+      }
+      $log = new LogController();
+      $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'changeStatus',
+                'details' => 'User requests for changing device status',
+                ]);
+      $device->status = true;
+      $device->save();
+
+        if($user->role === 'super_admin'){
+          
+          event(new Device_Status_Changed($user,$device));
+        }
     }
 
 }
