@@ -128,6 +128,7 @@ class DeviceController extends Controller
 
 
      public function search(Request $request){
+      dd('test');
        $query_params = $request->query();
        if(!$query_params) return response(['msg'=>'please provide query']);
         $devices = Device::where('serial_number', 'like', "%$query_params%")

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('account_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('profile_logo');
             $table->string('address');
-            $table->time('time')->default(now());
+            $table->time('time')->nullable()->default(NULL);;
         });
     }
 

@@ -66,11 +66,11 @@ Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], fu
     Route::post('/device',[DeviceController::class,'store']);
     Route::put('/device/{device}',[DeviceController::class,'update']);
     Route::delete('/device/{device}',[DeviceController::class,'destroy']);
-   
-
-
+    
+    
 });
 
+Route::get('/device/search', [DeviceController::class, 'search']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

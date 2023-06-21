@@ -23,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('devices', function (Blueprint $table) {
-            //
-        });
+        $table->dropIndex('serial_number');
+        $table->dropIndex('mac_address');
+    });
     }
 };
