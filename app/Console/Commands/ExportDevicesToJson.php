@@ -29,6 +29,7 @@ class ExportDevicesToJson extends Command
         $filename = 'devices.json';
         $path = storage_path('app/' . $filename);
 
+
         File::append($path, $json);
 
         $this->info("Devices exported to $filename");
