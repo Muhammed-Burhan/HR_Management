@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Device;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+
 class ExportDevicesToJson extends Command
 {
     /**
@@ -12,11 +13,9 @@ class ExportDevicesToJson extends Command
      *
      * @var string
      */
-    
-     protected $signature = 'devices:export-json';
+
+    protected $signature = 'devices:export-json';
     protected $description = 'Export all devices to a JSON file';
-    
-    
 
     /**
      * Execute the console command.
@@ -25,12 +24,13 @@ class ExportDevicesToJson extends Command
     {
         $devices = Device::all();
         $data = $devices->toArray();
-        $json = json_encode($data, JSON_PRETTY_PRINT);
+        $json = json_encode($data, JSON_UNESCAPED_SLASHES);
 
-        $filename = app_path('Http/devices.json');
-        $path = storage_path($filename);
+        $filename = 'devices.json';
+        $path = storage_path('app/' . $filename);
 
-        File::put($path, $json);
+
+        File::append($path, $json);
 
         $this->info("Devices exported to $filename");
     }
