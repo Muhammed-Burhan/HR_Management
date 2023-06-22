@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use App\Exceptions\GeneralJsonException;
 use App\Jobs\ImportDevices;
-use League\Csv\Writer;
-use League\Csv\CannotInsertRecord;
+use App\Models\Branch;
+
 class DeviceController extends Controller
 {
     /**
@@ -48,6 +48,11 @@ class DeviceController extends Controller
                 'action' => 'store Device',
                 'details' => 'User creates a new Device',
                 ]);
+
+                $branch = Branch::find($request['branch_id']);
+                if (!$branch) {
+                    throw new GeneralJsonException('Branch with id ' . $request['branch_id'] . ' does not exist');
+                }
              $result=Device::create([
                 'device_name'=>$request['device_name'],
                 'serial_number'=>$request['serial_number'],
@@ -55,7 +60,7 @@ class DeviceController extends Controller
                 'registered_date'=>Date::now()->format('Y-m-d H:i:s'),
                 'status'=>false,
                 'branch_id'=>$request['branch_id'],
-                'cartoon_number'=>$request['device_name'],
+                'cartoon_number'=>$request['cartoon_number'],
         ]);
             return new DeviceResource($result);
         } catch (\Throwable $th) {
@@ -93,7 +98,6 @@ class DeviceController extends Controller
                 'serial_number',
                 'mac_address',
                 'sold_date',
-                'status',
                 'branch_id',
                 'cartoon_number',
         ]));
@@ -167,6 +171,7 @@ class DeviceController extends Controller
         if($user->role === 'super_admin'){
           
           event(new Device_Status_Changed($user,$device));
+          return response(['msg'=>'email send']);
         }
     }
 
@@ -174,22 +179,27 @@ class DeviceController extends Controller
 
    public function export()
   {
-    $filePath = app_path('Http/devices.csv');
-    $devices = Device::all(['id', 'device_name', 'serial_number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
-    $log = new LogController();
+     if (!Auth::check()) {
+        return response(['message' => 'Unauthorized'], 401);
+      }
+     $log = new LogController();
       $log->log([
                 'user_id' =>Auth::user()->id,
                 'user' =>Auth::user()->name,
-                'action' => 'export devices',
-                'details' => 'User requests for exporting devices data',
+                'action' => 'export',
+                'details' => 'User requests for exporting devices',
                 ]);
+                
+    $filePath = app_path('Http/devices.csv');
+    $devices =Device::select(['id', 'device_name', 'serial_number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number'])->get();
+  
     if(empty($devices)){
-      return response(['meassge'=>"devices table is empty"]);
+      return response(['message'=>"devices table is empty"]);
     }
 
-    $file = fopen($filePath, 'a');
+    $file = fopen($filePath, 'w');
       
-    // Write the header row
+    
     fputcsv($file, ['id', 'device_name', 'serial_number Number', 'mac_address', 'status', 'branch_id', 'registered_date', 'sold_date', 'cartoon_number']);
 
     // Write device data rows
@@ -200,23 +210,30 @@ class DeviceController extends Controller
             $device->serial_number,
             $device->mac_address,
             $device->status,
-            strval($device->branch_id),
+            $device->branch_id ?? 1,
             $device->registered_date,
             $device->sold_date,
             $device->cartoon_number,
         ]);
     }
-    
     fclose($file);
     
+  
     return response(['message' => 'Devices exported successfully']);
   }
 
-  public function import(){
+
+  public function import(Request $request){
     $filePath = app_path('Http/devices.csv');
-
-    ImportDevices::dispatch($filePath);
+    $log = new LogController();
+      $log->log([
+                'user_id' =>Auth::user()->id,
+                'user' =>Auth::user()->name,
+                'action' => 'import devices',
+                'details' => 'User requests for importing devices data',
+                ]);
+    $isSuccessful=ImportDevices::dispatch($filePath);
+    if(!$isSuccessful) return response(['msg'=>'failed to import devices']);
+    return response(['msg'=>'Successfully imported devices']);
   }
-
-
 }
