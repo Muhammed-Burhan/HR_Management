@@ -1,15 +1,9 @@
 <?php
 
-
+use App\Http\Controllers\DeviceController;
+use App\Http\Middleware\SuperAdminMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\DeviceController;
-use App\Http\Controllers\LogController;
-use App\Http\Controllers\WarehouseController;
-use App\Http\Middleware\SuperAdminMiddleware;
-use App\Models\Warehouse;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,62 +16,26 @@ use App\Models\Warehouse;
 |
 */
 
+ 
 
-Route::get('/login',function(){
-    return response(['error'=>'unauthorized']);
+
+Route::prefix('v1')->group(function(){
+
+    require base_path('routes/api/v1/authRoutes.php');
+
+    require base_path('routes/api/v1/warehouseRoutes.php');
+    
+    require base_path('routes/api/v1/branchRoutes.php');
+    
+    require base_path('routes/api/v1/logRoutes.php');
+
+    require base_path('routes/api/v1/devicesRoute.php');
 });
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-
-Route::group(['middleware' => ['auth:sanctum', SuperAdminMiddleware::class]], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    //WareHouse End Points 
-    Route::get('/warehouse',[WarehouseController::class,'index']);
-    Route::post('/warehouse',[WarehouseController::class,'store']);
-    Route::get('/warehouse/{warehouse}',[WarehouseController::class,'show']);
-    Route::put('/warehouse/{warehouse}',[WarehouseController::class,'update']);
-    Route::delete('/warehouse/{warehouse}',[WarehouseController::class,'destroy']);
-    //get all branches related to the same warehouse
-     Route::get('/warehouse/{id}/branch',[WarehouseController::class,'getWarehouseBranch']);
-
-    //get all devices related to the same warehouse
-     Route::get('/warehouse/{warehouse}/device',[WarehouseController::class,'getDevicesOfWarehouse']);
 
 
 
-    //Branch End Points
-    Route::get('/branch',[BranchController::class,'index']);
-    Route::get('/branch/{branch}',[BranchController::class,'show']);
-    Route::post('/branch',[BranchController::class,'store']);
-    Route::put('/branch/{branch}',[BranchController::class,'update']);
-    Route::delete('/branch/{branch}',[BranchController::class,'destroy']);
-
-    //Log End Points
-    Route::get('/log',[LogController::class,'index']);
-    Route::get('/log/{log}',[LogController::class,'show']);
-    Route::delete('/log/{log}',[LogController::class,'destroy']);
-    Route::delete('/device',[DeviceController::class,'search']);
 
 
-   
-    Route::get('devices/search',[DeviceController::class,'search']);
-    
-    Route::get('devices/export',[DeviceController::class,'export']);
-    Route::get('devices/import',[DeviceController::class,'import']);
-
-    
-    
-    Route::prefix('devices')->group(function () {
-        Route::get('/',[DeviceController::class,'index']);
-        Route::get('/{device}',[DeviceController::class,'show']);
-        Route::post('/',[DeviceController::class,'store']);
-        Route::put('/{device}',[DeviceController::class,'update']);
-        Route::delete('/{device}',[DeviceController::class,'destroy']);
-        Route::get('/{device}/status',[DeviceController::class,'changeStatus']);
-    });
-    
-});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

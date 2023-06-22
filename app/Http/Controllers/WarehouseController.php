@@ -103,7 +103,7 @@ class WarehouseController extends Controller
      */
     public function destroy(Warehouse $warehouse)
     {
-        throw_if(!$warehouse, GeneralJsonException::class,'Record not found');
+        throw_if(!$warehouse, GeneralJsonException::class);
          $log = new LogController();
              $log->log([
                 'user_id' =>Auth::user()->id,
@@ -135,7 +135,7 @@ class WarehouseController extends Controller
     }
 
     public function getDevicesOfWarehouse(Warehouse $warehouse){
-        throw_if(!$warehouse,GeneralJsonException::class);
+        throw_if(!$warehouse,GeneralJsonException::class,"No device found for this ware house");
 
          $log = new LogController();
              $log->log([

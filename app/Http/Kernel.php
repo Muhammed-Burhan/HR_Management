@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
          'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+         'admin_and_super_admin' => \App\Http\Middleware\AdminAndSuperAdmin::class,
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
