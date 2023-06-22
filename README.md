@@ -51,9 +51,7 @@ To install this application, follow these steps:
 ```
    php artisan db:seed --class=UserSeeder
 ```
-
 The credentials are:
-
 ```
    email: test_user@test.com
    password: 5451129
