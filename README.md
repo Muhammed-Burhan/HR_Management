@@ -45,16 +45,17 @@ To install this application, follow these steps:
    php artisan migrate
 ```
 
-6. To test all the features you need to be a super_admin. You can run this command to create a Super_Admin and use the
-   credentials to login and get a token.(it will take some time, because we will create 3000 devices.)
+6. To test all features, populate the database and create a Super_Admin. Use the following command to accomplish this:
+   (it will take some time, because we will create 3000 devices)
+```
+   php artisan db:seed
+```
+
+The command populates the database and sets up a super_admin account. Here are the login credentials:
 
 ```
-   php artisan db:seed --class=UserSeeder
-```
-The credentials are:
-```
-   email: test_user@test.com
-   password: 5451129
+   Email: test_user@test.com
+   Password: 5451129
 ```
 
 7. Start the local development server:
@@ -63,16 +64,24 @@ The credentials are:
    php artisan serve
 ```
 
-8. To export database (you can find the file inside :storage/app):
+8. To automatically export and back up the database daily, run the following command(you can find the file inside :storage/app):
 
 ```
-   php artisan database:export
+   php artisan db:backup-export
+```
+
+> [Note]:To automatically back up the database daily,you have to run the following command:
+
+```
+   php artisan schedule:run
+
 ```
 
 9. To export devices table to json (you can find the file inside: storage/app):
 
 ```
   php artisan devices:export-json
+
 ```
 
 ## Contact
