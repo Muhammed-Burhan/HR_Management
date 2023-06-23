@@ -26,10 +26,10 @@ class DeviceFactory extends Factory
                 $this->faker->boolean(5) ? '0221:' . $this->faker->regexify('[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}') 
                 :  $this->faker->macAddress()
             ]),
-            'status'=>false,
+            'status'=>$this->faker->boolean(4),
             'branch_id'=>FactoryHelper::getRandomModelId(Branch::class),
             'registered_date'=>$this->faker->dateTime,
-            'sold_date' => null,
+            'sold_date' => $this->faker->randomElement([null, $this->faker->boolean(22) ? $this->faker->date : null]),
             'cartoon_number' =>$this->faker->numberBetween(1,5),
         ];
     }
