@@ -183,6 +183,7 @@ class DeviceController extends Controller
           event(new Device_Status_Changed($user,$device));
           return response(['msg'=>'email send']);
         }
+        return response(['msg'=>'you perform this action']);
     }
 
 
