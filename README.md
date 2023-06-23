@@ -74,7 +74,6 @@ The command populates the database and sets up a super_admin account. Here are t
 
 ```
    php artisan schedule:run
-
 ```
 
 9. To export devices table to json (you can find the file inside: storage/app):
