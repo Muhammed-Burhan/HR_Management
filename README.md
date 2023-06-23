@@ -67,13 +67,13 @@ The command populates the database and sets up a super_admin account. Here are t
    Password: 5451129
 ```
 
-7. Start the local development server:
+8. Start the local development server:
 
 ```
    php artisan serve
 ```
 
-8. To automatically export and back up the database daily, run the following command(you can find the file inside :storage/app):
+9. To automatically export and back up the database daily, run the following command(you can find the file inside :storage/app):
 
 ```
    php artisan db:backup
@@ -85,7 +85,7 @@ The command populates the database and sets up a super_admin account. Here are t
    php artisan schedule:run
 ```
 
-9. To export devices table to json, you can run the following command(you can find the file inside: storage/app):
+10. To export devices table to json, you can run the following command(you can find the file inside: storage/app):
 
 ```
   php artisan devices:export-json
