@@ -80,7 +80,6 @@ The command populates the database and sets up a super_admin account. Here are t
 
 ```
   php artisan devices:export-json
-
 ```
 
 ## Contact
