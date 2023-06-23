@@ -10,6 +10,8 @@ use App\Models\Device;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+
 class WarehouseController extends Controller
 {
     /**
@@ -134,9 +136,9 @@ class WarehouseController extends Controller
         return response([$data]);
     }
 
-    public function getDevicesOfWarehouse(Warehouse $warehouse){
-        throw_if(!$warehouse,GeneralJsonException::class,"No device found for this ware house");
-
+    public function getDevicesOfWarehouse(Request $request,Warehouse $warehouse){
+        throw_if(!$warehouse,GeneralJsonException::class);
+        $paginateSize = $request->paginate_size ?? 25;
          $log = new LogController();
              $log->log([
                 'user_id' =>Auth::user()->id,
@@ -144,11 +146,13 @@ class WarehouseController extends Controller
                 'action' => 'gets Devices Of a Warehouse',
                 'details' => 'User get all related devices of a warehouse',
                 ]);
-
-        $devices = Device::join('branch', 'devices.branch_id', '=', 'branch.id')
+        $cacheKey='devices_of_same_warehouse'.md5(json_encode($request->all()));
+        $devices =Cache::remember($cacheKey,120,function()use($warehouse,$paginateSize){
+        return Device::join('branch', 'devices.branch_id', '=', 'branch.id')
         ->where('warehouse_id', $warehouse->id)
-        ->select('device_name', 'serial_number', 'mac_address', 'status', 'registered_date', 'sold_date', 'cartoon_number')
-        ->get();
+        ->select('name','device_name', 'serial_number', 'mac_address', 'status', 'registered_date', 'sold_date', 'cartoon_number')
+        ->paginate($paginateSize);
+        }); 
 
         return response()->json($devices);
     }

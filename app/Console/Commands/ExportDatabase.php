@@ -7,21 +7,21 @@ use Illuminate\Console\Command;
 class ExportDatabase extends Command
 {
    
-    protected $signature = 'database:export';
-    protected $description = 'Export the database';
+    protected $signature = 'db:backup';
+    protected $description = 'Export the database and back it up';
     
 
     /**
      * Execute the console command.
      */
     public function handle()
-    {
+    {    //you can checkout config/database this will return mysql
          $connection = config('database.default');
 
-        // Get the database configuration
+        // Get the database configuration (mysql array will be returned)
         $config = config("database.connections.$connection");
 
-        // Create a filename for the export
+        // Create a filename for the exporting the database backup
         $filename = 'database_' . date('Y_m_d_His') . '.sql';
 
         // Generate the mySqlDump command
@@ -39,6 +39,7 @@ class ExportDatabase extends Command
         // Execute the mySqlDump command
         exec($command);
 
+        //the message after running the command
         $this->info("Database exported to $filename");
     }
 }

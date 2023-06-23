@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ExportDevicesToJson;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -11,8 +12,8 @@ class Kernel extends ConsoleKernel
      * The Artisan commands provided by your application.
      */
     protected $commands = [
-        \App\Console\Commands\ExportDevicesToJson::class,
-            Commands\ExportDatabase::class,
+        ExportDevicesToJson::class,
+        Commands\ExportDatabase::class,
     ];
 
     /**
@@ -20,7 +21,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Add your scheduled commands here, if any
+        // Added scheduling for db backup command
+        $schedule->command('db:backup')->daily();
     }
 
     /**

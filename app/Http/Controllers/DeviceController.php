@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Date;
 use App\Exceptions\GeneralJsonException;
 use App\Jobs\ImportDevices;
 use App\Models\Branch;
+use Illuminate\Support\Facades\Cache;
 
 class DeviceController extends Controller
 {
@@ -26,8 +27,8 @@ class DeviceController extends Controller
                 'action' => 'Show Device',
                 'details' => 'User requesting all Devices',
                 ]);
-             $warehouses=Device::all();
-             return DeviceResource::collection($warehouses);
+             $devices=Device::paginate(10);
+             return DeviceResource::collection($devices);
             } catch (\Throwable $th) {
             throw (new GeneralJsonException($th->getMessage()));
         }
@@ -132,13 +133,22 @@ class DeviceController extends Controller
     }
 
 
+    //the result of this method will be cached for 3 minutes
+    //and we use pagination
      public function search(Request $request){
        $query_params = $request->query('q');
        
-       if(!$query_params) return response(['msg'=>'please provide query']);
-        $devices = Device::where('serial_number', 'like', "%$query_params%")
+       if(!$query_params) 
+       {
+       return response(['msg'=>'please provide query']);
+       }
+       $paginateSize = $request->paginate_size ?? 10;
+       $cacheKey='deviceSearch'.md5(json_encode($request->all()));
+        $devices = Cache::remember( $cacheKey,180,function()use($query_params,$paginateSize){
+        return Device::where('serial_number', 'like', "%$query_params%")
         ->orWhere('mac_address', 'like', "%$query_params%")
-        ->get();
+        ->paginate($paginateSize);
+      });
 
         $log = new LogController();
         $log->log([
