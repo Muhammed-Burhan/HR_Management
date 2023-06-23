@@ -1,23 +1,26 @@
 # HR Management API
 
-This is an HR management API that provides endpoints for managing warehouse, branches, and devices in each branch.
+This is an HR management API that provides endpoints for managing warehouses, branches, and devices in each branch.
 
 ## Status
 
 The initial setup of the HR management API is complete. The following endpoints are now available:
 
--   All the required tables created.
--   All the required model and controllers created.
--   Finished setting up the auth.
--   Created the end points for warehouse.
--   Added Exception Handling and fixed some errors.
--   SetUp required relationships between the tables.
--   Finished the need endpoints for branch model.
--   Finished the method which return all branches of the same warehouse.
--   Finished the method which returns all devices related to the same warehouse.
--   now all user actions are logged.
--   export and import added
--   Json export of the device table added
+- All the required tables have been created.
+- All the required models and controllers have been created.
+- Authentication setup has been finished.
+- Endpoints for warehouse management have been created.
+- Exception handling has been implemented and certain errors have been fixed.
+- Required relationships between the tables have been established.
+- Endpoints for branch model have been completed.
+- The method to retrieve all branches of the same warehouse has been implemented.
+- The method to retrieve all devices related to the same warehouse has been completed.
+- User actions are now logged.
+- Export and import functionalities have been added.
+- JSON export of the device table has been implemented.
+- A seeds file has been included to populate the database.
+- Caching and pagination have been implemented.
+- Scheduled database backup has been added.
 
 ## Installation
 
@@ -29,23 +32,29 @@ To install this application, follow these steps:
    git clone https://github.com/Muhammed-Burhan/HR_Management.git
 ```
 
-2. Install the dependencies:
+2. Change branch to the development:
+
+```
+   git checkout development
+```
+
+3. Install the dependencies:
 
 ```
    composer install
 ```
 
-3. Copy the `.env.example` file to `.env`:
+4. Copy the `.env.example` file to `.env` (create `.env` file):
 
-4. Update the `.env` file with the appropriate database information and other settings.
+5. Update the `.env` file with the appropriate database information and other settings.
 
-5. Run the database migrations:
+6. Run the database migrations:
 
 ```
    php artisan migrate
 ```
 
-6. To test all features, populate the database and create a Super_Admin. Use the following command to accomplish this:
+7. To test all features, populate the database and create a Super_Admin. Use the following command to accomplish this:
    (it will take some time, because we will create 3000 devices)
 ```
    php artisan db:seed
@@ -67,7 +76,7 @@ The command populates the database and sets up a super_admin account. Here are t
 8. To automatically export and back up the database daily, run the following command(you can find the file inside :storage/app):
 
 ```
-   php artisan db:backup-export
+   php artisan db:backup
 ```
 
 > [Note]:To automatically back up the database daily,you have to run the following command:
