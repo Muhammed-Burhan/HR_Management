@@ -18,7 +18,7 @@ The initial setup of the HR management API is complete. The following endpoints 
 - User actions are now logged.
 - Export and import functionalities have been added.
 - JSON export of the device table has been implemented.
-- A seeds file has been included to populate the database.
+- Seeds files added to populate the database.
 - Caching and pagination have been implemented.
 - Scheduled database backup has been added.
 
@@ -32,9 +32,9 @@ To install this application, follow these steps:
    git clone https://github.com/Muhammed-Burhan/HR_Management.git
 ```
 
-2. Change branch to the development:
+2. Change branch to development:
 
-```
+```             
    git checkout development
 ```
 
@@ -85,7 +85,7 @@ The command populates the database and sets up a super_admin account. Here are t
    php artisan schedule:run
 ```
 
-9. To export devices table to json (you can find the file inside: storage/app):
+9. To export devices table to json, you can run the following command(you can find the file inside: storage/app):
 
 ```
   php artisan devices:export-json
