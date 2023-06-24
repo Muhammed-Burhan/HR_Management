@@ -2,6 +2,8 @@
 
 This is an HR management API that provides endpoints for managing warehouses, branches, and devices in each branch.
 
+### Switch to the <span style="color: blue;">[`development`](https://github.com/Muhammed-Burhan/HR_Management/tree/development) </span> branch for more features and bug fixes.
+
 ## Status
 
 The initial setup of the HR management API is complete. The following endpoints are now available:
