@@ -91,6 +91,19 @@ The command populates the database and sets up a super_admin account. Here are t
   php artisan devices:export-json
 ```
 
+**Note:**  
+1.For using the email service, you have to register in [Mailtrap](https://mailtrap.io/) and provide the following info inside the `.env` file:
+  ```
+    MAIL_MAILER=smtp
+    MAIL_HOST=sandbox.smtp.mailtrap.io
+    MAIL_PORT=PortNumber
+    MAIL_USERNAME=USERNAME
+    MAIL_PASSWORD=Password
+    MAIL_ENCRYPTION=tls
+```
+2.Please note that a token is required in the header to access the requested routes
+
+
 ## Contact
 
 If you have any questions or feedback, please contact me at mohammed_burhan@outlook.com
