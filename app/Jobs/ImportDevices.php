@@ -59,7 +59,6 @@ class ImportDevices implements ShouldQueue
             }
             
             fclose($handle);
-            return response(['msg'=>'import successful']);
         } else {
             response(['message'=>"Failed to open CSV file:{$this->filePath}"]);
         }
