@@ -103,7 +103,11 @@ The command populates the database and sets up a super_admin account. Here are t
 ```
 2.Please note that a token is required in the header to access the requested routes
 
-
+3.Please note to process the queued jobs, you need to run the queue worker process, 
+      You can start the queue worker by running the following command in a split terminal:
+```
+  php artisan queue:work
+```
 ## Contact
 
 If you have any questions or feedback, please contact me at mohammed_burhan@outlook.com
